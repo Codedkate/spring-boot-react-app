@@ -1,0 +1,28 @@
+trigger: none
+pool:
+  name: Azure Pipelines
+steps:
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@1
+  displayName: 'Install Terraform latest'
+
+- task: TerraformTaskV1@0
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'Visual Studio Enterprise Subscription (5f45be49-91c7-4b3d-9055-dbb5e3a79364)'
+    backendAzureRmResourceGroupName: 'deploymentrg'
+    backendAzureRmStorageAccountName: 'springbootstorage1'
+    backendAzureRmContainerName: 'springcon'
+    backendAzureRmKey: 'statefile.tf'
+
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+  displayName: 'Terraform : azurerm'
+  inputs:
+    command: plan
+    environmentServiceNameAzureRM: 'Visual Studio Enterprise Subscription (5f45be49-91c7-4b3d-9055-dbb5e3a79364)'
+
+- task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV1@0
+  displayName: 'Terraform : azurerm'
+  inputs:
+    command: apply
+    environmentServiceNameAzureRM: 'Visual Studio Enterprise Subscription (5f45be49-91c7-4b3d-9055-dbb5e3a79364)'

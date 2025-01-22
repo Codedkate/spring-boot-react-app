@@ -1,0 +1,47 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  TF_VERSION: '1.5.0'  # Specify the version of Terraform you want to use
+
+stages:
+- stage: Destroy
+  displayName: Destroy Stage
+  jobs:
+  - job: TerraformDestroy
+    displayName: Terraform Destroy Job
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
+
+    - script: |
+        curl -sSL https://releases.hashicorp.com/terraform/${{ variables.TF_VERSION }}/terraform_${{ variables.TF_VERSION }}_linux_amd64.zip > terraform.zip
+        unzip terraform.zip
+        sudo mv terraform /usr/local/bin/
+      displayName: 'Install Terraform'
+
+    - script: terraform version
+      displayName: 'Verify Terraform installation'
+
+    - checkout: self
+      displayName: 'Checkout Repository'
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'svc'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "Logging into Azure"
+          az login --service-principal -u $(armClientId) -p $(armClientSecret) --tenant $(armTenantId)
+
+          echo "Initializing Terraform"
+          terraform init
+
+          echo "Destroying Terraform-managed resources"
+          terraform destroy -auto-approve
+      displayName: 'Terraform Destroy'
