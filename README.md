@@ -1,3 +1,4 @@
+![infra](https://github.com/user-attachments/assets/ffc31f66-b068-42e4-8034-809d84cd358f)
 # react-and-spring-data-rest
 
 The application has a react frontend and a Spring Boot Rest API, packaged as a single module Maven application. You can build the application using maven and run it as a Spring Boot application using the flat jar generated in target (`java -jar target/*.jar`).
