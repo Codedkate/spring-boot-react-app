@@ -1,3 +1,4 @@
+<img width="935" alt="grafana-1" src="https://github.com/user-attachments/assets/80cab09c-2047-499d-87a8-415fe9b6bcf4" />
 ![infra](https://github.com/user-attachments/assets/ffc31f66-b068-42e4-8034-809d84cd358f)
 # react-and-spring-data-rest
 
